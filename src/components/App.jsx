@@ -12,6 +12,8 @@ function App() {
 
 const [countriesList, setCountriesList] = useState ([]);
 
+const [nameSearch, setNameSearch] = useState("");
+
 
 useEffect(()=> {
   fetch("https://restcountries.com/v3.1/all?fields=name,capital,flag,continents")
@@ -22,11 +24,17 @@ useEffect(()=> {
   })
 }, [])
 
-const paintContruntries = () => {
-  return countriesList.map((eachCountry)=><li className="country_item"><p>{eachCountry.flag}</p><h3>{eachCountry.name.common}</h3><p>{eachCountry.capital}</p><p>{eachCountry.continents}</p></li>)
+const handleChange =(ev) => {
+  setNameSearch(ev.target.value)
 }
 
- //const listLi = namesList.map((name, index) => <li key={index}>{name}</li>);  o en constante o en funcion
+const paintContruntries = () => {
+ return  countriesList.filter((eachCountry)=>eachCountry.name.common.toLowerCase().includes(nameSearch))
+
+  .map((eachCountry, index)=><li className="country_item" key={index}><p>{eachCountry.flag}</p><h3>{eachCountry.name.common}</h3><p>{eachCountry.capital}</p><p>{eachCountry.continents}</p></li>)
+}
+
+ 
 
   // Funciones de renderizado
 
@@ -38,8 +46,11 @@ const paintContruntries = () => {
   <h2>Filters</h2>
   <form >
     <input
+    className="form"
     type="text"
     placeholder="Spain..."
+    onChange={handleChange}
+   
     
     />
   </form>
